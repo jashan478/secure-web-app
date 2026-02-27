@@ -2,18 +2,16 @@ import { useState } from "react";
 import LoginForm from "./components/LoginForm";
 import ChuckNorris from "./components/ChuckNorris";
 
-function App() {
-  const [token, setToken] = useState("null");
+export default function App() {
+  const [token, setToken] = useState(null); // not "null"
 
   return (
     <div style={{ textAlign: "center", marginTop: "50px" }}>
       {!token ? (
-        <LoginForm setToken={setToken} />
+        <LoginForm onLogin={setToken} />
       ) : (
         <ChuckNorris token={token} setToken={setToken} />
       )}
     </div>
   );
 }
-
-export default App;

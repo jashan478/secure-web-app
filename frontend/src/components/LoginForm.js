@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { API_BASE } from "../config";
 
 export default function LoginForm({ onLogin }) {
   const [email, setEmail] = useState("");
@@ -58,7 +59,7 @@ export default function LoginForm({ onLogin }) {
   async function performLogin(username, password) {
     setError("");
     setFieldErrors({});
-    const response = await fetch('http://localhost:3000/login', {
+    const response = await fetch(`${API_BASE}/login`, {
       method: "POST",
       headers: {
         // Required for ExpressJS to parse body

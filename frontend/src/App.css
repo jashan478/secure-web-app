@@ -1,38 +1,68 @@
-.App {
-  text-align: center;
+/* App.css */
+
+body {
+  background-color: #f4f6f8;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.container {
+  max-width: 420px;
+  margin: 60px auto;
+  padding: 30px;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+h1 {
+  margin-bottom: 20px;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+/* Buttons */
+button {
+  padding: 10px 16px;
+  border: none;
+  border-radius: 6px;
+  background-color: #2563eb;
   color: white;
+  font-size: 16px;
+  cursor: pointer;
 }
 
-.App-link {
-  color: #61dafb;
+button:hover {
+  background-color: #1e40af;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
+button.logout {
+  margin-top: 20px;
+  background-color: #dc2626;
+}
+
+button.logout:hover {
+  background-color: #991b1b;
+}
+
+/* Spinner */
+.spinner {
+  margin: 20px auto;
+  width: 40px;
+  height: 40px;
+  border: 4px solid #ddd;
+  border-top: 4px solid #2563eb;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
   to {
     transform: rotate(360deg);
   }
+}
+
+/* Fact box */
+.fact-box {
+  background: #eef2ff;
+  padding: 20px;
+  border-radius: 8px;
+  margin-top: 20px;
+  font-size: 18px;
 }

@@ -34,7 +34,7 @@ export default function ChuckNorris({ token, setToken }) {
         }
 
         setFact(data.fact || "");
-      } catch (err) {
+      } catch {
         setError("Network error. Could not reach the server.");
       } finally {
         setLoading(false);
@@ -44,20 +44,39 @@ export default function ChuckNorris({ token, setToken }) {
     fetchFact();
   }, [token, setToken]);
 
-  if (loading) {
-    return <p>Loading fact...</p>;
-  }
-
-  if (error) {
-    return <p style={{ color: "#b00020" }}>{error}</p>;
-  }
+  // 🔹 Logout handler (Person 5 responsibility)
+  const handleLogout = async () => {
+    try {
+      await fetch(`${API_BASE}/logout`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+    } finally {
+      setToken(null); // clear token + redirect to login
+    }
+  };
 
   return (
-    <div>
+    <div className="container">
       <h2>Chuck Norris Fact</h2>
-      <p style={{ maxWidth: "600px", margin: "20px auto", lineHeight: 1.6 }}>
-        {fact}
-      </p>
+
+      {loading && <div className="spinner" />}
+
+      {error && (
+        <p style={{ color: "#b00020", marginTop: "16px" }}>{error}</p>
+      )}
+
+      {!loading && !error && (
+        <div className="fact-box">
+          {fact}
+        </div>
+      )}
+
+      <button className="logout" onClick={handleLogout}>
+        Logout
+      </button>
     </div>
   );
 }

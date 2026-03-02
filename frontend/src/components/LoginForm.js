@@ -6,6 +6,7 @@ export default function LoginForm({ onLogin }) {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [fieldErrors, setFieldErrors] = useState({});
+  const [submitting, setSubmitting] = useState(false);
 
   function validateInputs(currentEmail, currentPassword) {
     const errors = {};
@@ -53,57 +54,78 @@ export default function LoginForm({ onLogin }) {
       return;
     }
 
+    setSubmitting(true);
     await performLogin(email.trim(), password);
+    setSubmitting(false);
   }
 
   async function performLogin(username, password) {
     setError("");
     setFieldErrors({});
+
     const response = await fetch(`${API_BASE}/login`, {
       method: "POST",
       headers: {
-        // Required for ExpressJS to parse body
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify({ username, password })
+      body: JSON.stringify({ username, password }),
     });
-    
+
     const data = await response.json();
 
     if (response.ok && data.uuid) {
       onLogin(data.uuid);
       setPassword("");
       return;
-    } 
-    const msg = data?.message || (response.status === 401 ? "Invalid email or password." : `Login failed (${response.status}${response.statusText ? ` ${response.statusText}` : ""})`);
+    }
+
+    const msg =
+      data?.message ||
+      (response.status === 401
+        ? "Invalid email or password."
+        : `Login failed (${response.status})`);
+
     setError(msg);
-}
+  }
 
   return (
-    <div style={{ textAlign: "center", marginTop: "50px" }}>
-      <form onSubmit={handleSubmit}>
-        <label>Enter your email:
-          <input 
-          type="email" 
-          value={email}
-          onChange={handleEmailChange}
-          aria-invalid={Boolean(fieldErrors.email)}
+    <div className="container">
+      <h1>Login</h1>
+
+      <form onSubmit={handleSubmit} noValidate>
+        <div style={{ marginBottom: "16px" }}>
+          <label>Email</label>
+          <input
+            type="email"
+            value={email}
+            onChange={handleEmailChange}
+            aria-invalid={Boolean(fieldErrors.email)}
+            style={{ width: "100%", padding: "8px", marginTop: "4px" }}
           />
-        </label>
-        {fieldErrors.email && <p style={{ color: "#b00020", margin: "8px 0" }}>{fieldErrors.email}</p>}
-        <br/>
-        <label>Enter your password:
-          <input 
-          type="password"
-          value={password}
-          onChange={handlePasswordChange}
-          aria-invalid={Boolean(fieldErrors.password)}
+          {fieldErrors.email && (
+            <p style={{ color: "#b00020" }}>{fieldErrors.email}</p>
+          )}
+        </div>
+
+        <div style={{ marginBottom: "16px" }}>
+          <label>Password</label>
+          <input
+            type="password"
+            value={password}
+            onChange={handlePasswordChange}
+            aria-invalid={Boolean(fieldErrors.password)}
+            style={{ width: "100%", padding: "8px", marginTop: "4px" }}
           />
-        </label>
-        {fieldErrors.password && <p style={{ color: "#b00020", margin: "8px 0" }}>{fieldErrors.password}</p>}
-        <br/>
-        {error && <p style={{ color: "#b00020", margin: "8px 0" }}>{error}</p>}
-        <input type="submit" value="Log In" />
+          {fieldErrors.password && (
+            <p style={{ color: "#b00020" }}>{fieldErrors.password}</p>
+          )}
+        </div>
+
+        {error && <p style={{ color: "#b00020" }}>{error}</p>}
+
+        <button type="submit" disabled={submitting}>
+          {submitting ? "Logging in..." : "Log In"}
+        </button>
       </form>
     </div>
   );

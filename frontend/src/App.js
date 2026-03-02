@@ -1,12 +1,13 @@
 import { useState } from "react";
 import LoginForm from "./components/LoginForm";
 import ChuckNorris from "./components/ChuckNorris";
+import "./App.css";
 
 export default function App() {
-  const [token, setToken] = useState(null); // not "null"
+  const [token, setToken] = useState(null);
 
   return (
-    <div style={{ textAlign: "center", marginTop: "50px" }}>
+    <div>
       {!token ? (
         <LoginForm onLogin={setToken} />
       ) : (
